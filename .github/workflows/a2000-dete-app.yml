@@ -1,7 +1,7 @@
-name: Run python script
+name: Run Jmeter scripts
 
 on:
-  push
+  workflow_dispatch:
 
 env:
   JmeterAPIscript1: DeterAPI/sampleAPI1.jmx
