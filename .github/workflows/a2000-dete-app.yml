@@ -2,7 +2,7 @@ name: Run Jmeter scripts
 
 on:
   workflow_dispatch:
-
+  workflow_call:
 env:
   JmeterAPIscript1: DeterAPI/sampleAPI1.jmx
   JmeterAPIscript2: DeterAPI/sampleAPI2.jmx
