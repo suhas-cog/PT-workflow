@@ -2,6 +2,12 @@ name: Run python script
 
 on:
   push
+
+env:
+  JmeterAPIscript1: DeterAPI/sampleAPI1.jmx
+  JmeterAPIscript2: DeterAPI/sampleAPI2.jmx
+  JmeterUIscript1: DeterUI/sampleUI1.jmx
+  JmeterUIscript2: DeterUI/sampleUI2.jmx
   
 # A workflow run is made up of one or more jobs that can run sequentially
 jobs:
@@ -29,9 +35,8 @@ jobs:
     - name: Run JMeter Test 1
       run: |
        ls
-       jmeter -n -t DeterAPI/sampleAPI1.jmx -Jpath=api/users?page=1 -Jduration=110 -Jusers=10 -Jrampup=10 -l ./SampleAPIjtl1.jtl
-       #jmeter -n -t ${jmx-directory/scriptname} -Host ${Host} -USERID ${USERID} -Password ${Password} -Protocol ${Protocol} -threads ${threads} -rampup ${rampup} -Duration ${Duration} -Port ${Port} -testid ${testid} -CMIP ${CMIP} -DETA_OR_IDT_CLOUD ${DETA_OR_IDT_CLOUD}
-
+       jmeter -n -t $JmeterAPIscript1 -Jpath=api/users?page=1 -Jduration=110 -Jusers=10 -Jrampup=10 -l ./SampleAPIjtl1.jtl
+       
     - name: Run JMeter HTML 1
       run: |
        ls
@@ -40,7 +45,7 @@ jobs:
     - name: Run JMeter Test 2
       run: |
        ls
-       jmeter -n -t DeterAPI/sampleAPI2.jmx -Jpath=api/users?page=1 -Jduration=110 -Jusers=10 -Jrampup=10 -l ./SampleAPIjtl2.jtl
+       jmeter -n -t $JmeterAPIscript2 -Jpath=api/users?page=1 -Jduration=110 -Jusers=10 -Jrampup=10 -l ./SampleAPIjtl2.jtl
 
     - name: Run JMeter HTML 2
       run: |
@@ -105,7 +110,7 @@ jobs:
     - name: Run JMeter Test 1
       run: |
        ls
-       jmeter -n -t DeterUI/sampleUI1.jmx -Jpath=api/users?page=1 -Jduration=110 -Jusers=10 -Jrampup=10 -l ./SampleUIjtl1.jtl
+       jmeter -n -t $JmeterUIscript1 -Jpath=api/users?page=1 -Jduration=110 -Jusers=10 -Jrampup=10 -l ./SampleUIjtl1.jtl
        #jmeter -n -t ${jmx-directory/scriptname} -Host ${Host} -USERID ${USERID} -Password ${Password} -Protocol ${Protocol} -threads ${threads} -rampup ${rampup} -Duration ${Duration} -Port ${Port} -testid ${testid} -CMIP ${CMIP} -DETA_OR_IDT_CLOUD ${DETA_OR_IDT_CLOUD}
 
     - name: Run JMeter HTML 1
@@ -116,7 +121,7 @@ jobs:
     - name: Run JMeter Test 2
       run: |
        ls
-       jmeter -n -t DeterUI/sampleUI2.jmx -Jpath=api/users?page=1 -Jduration=110 -Jusers=10 -Jrampup=10 -l ./SampleUIjtl2.jtl
+       jmeter -n -t $JmeterUIscript2 -Jpath=api/users?page=1 -Jduration=110 -Jusers=10 -Jrampup=10 -l ./SampleUIjtl2.jtl
 
     - name: Run JMeter HTML 2
       run: |
