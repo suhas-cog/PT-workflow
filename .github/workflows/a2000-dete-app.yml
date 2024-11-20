@@ -12,12 +12,17 @@ env:
 # A workflow run is made up of one or more jobs that can run sequentially
 jobs:
   jmeter_API_job:
-# The type of runner that the job will run on  
+# This job will run on AWS ECS API Runner in sequence 
     runs-on: performanceAPI
     
 # Git Checks-out our repository      
     name: JMeter Test Execution
-    steps:      
+    steps:    
+    - name: scripts to be executed
+      run: |
+        echo "$JmeterAPIscript1"
+        echo "$JmeterAPIscript2"
+        
     - name: Checkout
       uses: actions/checkout@v4
 
@@ -32,22 +37,22 @@ jobs:
         pip install requests boto3 pandas openpyxl
 
    # Run the Jmeter test cases
-    - name: Run JMeter Test 1
+    - name: Running JMeter for $JmeterAPIscript1
       run: |
        ls
        jmeter -n -t $JmeterAPIscript1 -Jpath=api/users?page=1 -Jduration=110 -Jusers=10 -Jrampup=10 -l ./SampleAPIjtl1.jtl
        
-    - name: Run JMeter HTML 1
+    - name: Running JMeter HTML for $JmeterAPIscript1
       run: |
        ls
        jmeter -Jjmeter.reportgenerator.exporter.html.series_filter="((T[0-9] {1,3}_))" -g ./SampleAPIjtl1.jtl -o ./HTMLReport1
 
-    - name: Run JMeter Test 2
+    - name: Running JMeter for $JmeterAPIscript2
       run: |
        ls
        jmeter -n -t $JmeterAPIscript2 -Jpath=api/users?page=1 -Jduration=110 -Jusers=10 -Jrampup=10 -l ./SampleAPIjtl2.jtl
 
-    - name: Run JMeter HTML 2
+    - name: Running JMeter HTML for $JmeterAPIscript2
       run: |
        ls
        jmeter -Jjmeter.reportgenerator.exporter.html.series_filter="((T[0-9] {1,3}_))" -g ./SampleAPIjtl2.jtl -o ./HTMLReport2
@@ -92,7 +97,12 @@ jobs:
     runs-on: performanceAPI
     
 # Git Checks-out our repository      
-    steps:      
+    steps:
+    - name: scripts to be executed
+      run: |
+        echo "$JmeterUIscript1"
+        echo "$JmeterUIscript2"
+        
     - name: Checkout
       uses: actions/checkout@v4
 
@@ -107,23 +117,23 @@ jobs:
         pip install requests boto3 pandas openpyxl
 
    # Run the Jmeter test cases
-    - name: Run JMeter Test 1
+    - name: Running JMeter for $JmeterUIscript1
       run: |
        ls
        jmeter -n -t $JmeterUIscript1 -Jpath=api/users?page=1 -Jduration=110 -Jusers=10 -Jrampup=10 -l ./SampleUIjtl1.jtl
        #jmeter -n -t ${jmx-directory/scriptname} -Host ${Host} -USERID ${USERID} -Password ${Password} -Protocol ${Protocol} -threads ${threads} -rampup ${rampup} -Duration ${Duration} -Port ${Port} -testid ${testid} -CMIP ${CMIP} -DETA_OR_IDT_CLOUD ${DETA_OR_IDT_CLOUD}
 
-    - name: Run JMeter HTML 1
+    - name: Running JMeter HTML for $JmeterUIscript1
       run: |
        ls
        jmeter -Jjmeter.reportgenerator.exporter.html.series_filter="((T[0-9] {1,3}_))" -g ./SampleUIjtl1.jtl -o ./HTMLReport1
 
-    - name: Run JMeter Test 2
+    - name: Running JMeter for $JmeterUIscript2
       run: |
        ls
        jmeter -n -t $JmeterUIscript2 -Jpath=api/users?page=1 -Jduration=110 -Jusers=10 -Jrampup=10 -l ./SampleUIjtl2.jtl
 
-    - name: Run JMeter HTML 2
+    - name: Running JMeter for $JmeterUIscript2
       run: |
        ls
        jmeter -Jjmeter.reportgenerator.exporter.html.series_filter="((T[0-9] {1,3}_))" -g ./SampleUIjtl2.jtl -o ./HTMLReport2
