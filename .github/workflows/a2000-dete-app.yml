@@ -1,6 +1,5 @@
-# This is a workflow for XXXX Project with Actions
 name: Run python script
-# Controls when the workflow will run
+
 on:
   push
   
@@ -9,10 +8,6 @@ jobs:
   jmeter_job:
 # The type of runner that the job will run on  
     runs-on: performanceAPI
-
-    permissions:
-      id-token: write
-      contents: read
     
 # Git Checks-out our repository      
     name: JMeter Test Execution
@@ -77,9 +72,9 @@ jobs:
       run: echo "MY_GITHUB_TOKEN=${{ secrets.MY_GITHUB_TOKEN }}" >> $GITHUB_ENV
       
   # Run python script to convert .json to .csv
-    - name: Run python script
-      run: |
-       python3 python.py
+    # - name: Run python script
+    #   run: |
+    #    python3 python.py
 
     # Run python script to compare results
     # - name: Run python script
