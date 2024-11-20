@@ -26,31 +26,44 @@ jobs:
         pip install requests boto3 pandas openpyxl
 
    # Run the Jmeter test cases
-    - name: Run JMeter Tests
+    - name: Run JMeter Test 1
       run: |
        ls
-       jmeter -n -t DeterAPI/sampleAPI1.jmx -Jpath=api/users?page=1 -Jduration=110 -Jusers=10 -Jrampup=10 -l ./SampleAPIjtl{2024}.jtl
+       jmeter -n -t DeterAPI/sampleAPI1.jmx -Jpath=api/users?page=1 -Jduration=110 -Jusers=10 -Jrampup=10 -l ./SampleAPIjtl1.jtl
        #jmeter -n -t ${jmx-directory/scriptname} -Host ${Host} -USERID ${USERID} -Password ${Password} -Protocol ${Protocol} -threads ${threads} -rampup ${rampup} -Duration ${Duration} -Port ${Port} -testid ${testid} -CMIP ${CMIP} -DETA_OR_IDT_CLOUD ${DETA_OR_IDT_CLOUD}
-      
+
+    - name: Run JMeter Test 2
+      run: |
+       ls
+       jmeter -n -t DeterAPI/sampleAPI2.jmx -Jpath=api/users?page=1 -Jduration=110 -Jusers=10 -Jrampup=10 -l ./SampleAPIjtl2.jtl
    # Upload the Jmeter results    
     - name: Upload Results
       uses: actions/upload-artifact@v4
       with:
         name: jmeter-results
-        path: SampleAPIjtl{2024}.jtl
+        path: |
+          SampleAPIjtl1.jtl
+          SampleAPIjtl2.jtl
         if-no-files-found: error
     # Generate an HTML Report    
-    - name: Run JMeter Tests
+    - name: Run JMeter HTML 1
       run: |
        ls
-       jmeter -Jjmeter.reportgenerator.exporter.html.series_filter="((T[0-9] {1,3}_))" -g ./SampleAPIjtl{2024}.jtl -o ./HTMLReport
+       jmeter -Jjmeter.reportgenerator.exporter.html.series_filter="((T[0-9] {1,3}_))" -g ./SampleAPIjtl1.jtl -o ./HTMLReport1
+
+    - name: Run JMeter HTML 2
+      run: |
+       ls
+       jmeter -Jjmeter.reportgenerator.exporter.html.series_filter="((T[0-9] {1,3}_))" -g ./SampleAPIjtl2.jtl -o ./HTMLReport2
 #filtered 
   # upload the HTML Reports    
     - name: Upload HTML Reports
       uses: actions/upload-artifact@v4
       with:
         name: jmeter-html-reports
-        path: HTMLReport
+        path: |
+          HTMLReport1
+          HTMLReport2
         if-no-files-found: error
 
   # Download the HTML Reports    
