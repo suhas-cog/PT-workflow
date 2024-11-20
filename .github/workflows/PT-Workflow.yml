@@ -1,6 +1,13 @@
-name: PT workflow
+name: main workflow
 on: 
+
   workflow_dispatch:
+
 jobs:
   PT:
+    if: github.event_name == 'workflow_dispatch'
     uses: ./.github/workflows/a2000-dete-app.yml
+    # with: 
+    #   environment : "qa"
+    #   testtype: "FT"
+    #   jobname: "job1"
