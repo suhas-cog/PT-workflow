@@ -12,11 +12,19 @@ on:
         description: Name of Script2 to run
         type: string
         required: true
+      JmeterUIscript1:
+        description: Name of Script1 to run
+        type: string
+        required: true
+      JmeterUIscript2:
+        description: Name of Script2 to run
+        type: string
+        required: true
 env:
   JmeterAPIscript1: ${{ inputs.JmeterAPIscript1 }}
   JmeterAPIscript2: ${{ inputs.JmeterAPIscript2 }}
-  JmeterUIscript1: DeterUI/sampleUI1.jmx
-  JmeterUIscript2: DeterUI/sampleUI2.jmx
+  JmeterUIscript1: ${{ inputs.JmeterUIscript1 }}
+  JmeterUIscript2: ${{ inputs.JmeterUIscript2 }}
   
 # A workflow run is made up of one or more jobs that can run sequentially
 jobs:
