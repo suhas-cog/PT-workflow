@@ -18,10 +18,15 @@ jobs:
     with: 
         JmeterAPIscript1 : "DeterAPI/sampleAPI1.jmx"
         JmeterAPIscript2: "DeterAPI/sampleAPI2.jmx"
-        # JmeterUIscript1: "DeterUI/sampleUI1.jmx"
-        # JmeterUIscript2: "DeterUI/sampleUI2.jmx"
-  # a2000-dete-app2:
-  #   if: ${{ github.event.inputs.a2000-dete-app2 == 'true'}}
-  #   uses: ./.github/workflows/a2000-dete-app.yml
+        JmeterUIscript1: "DeterUI/sampleUI1.jmx"
+        JmeterUIscript2: "DeterUI/sampleUI2.jmx"
+  a2000-dete-app2:
+   if: ${{ github.event.inputs.a2000-dete-app2 == 'true'}}
+   uses: ./.github/workflows/a2000-dete-app.yml
+   with: 
+        JmeterAPIscript1 : "DeterAPI/sampleAPI1.jmx"
+        JmeterAPIscript2: "DeterAPI/sampleAPI2.jmx"
+        JmeterUIscript1: "DeterUI/sampleUI1.jmx"
+        JmeterUIscript2: "DeterUI/sampleUI2.jmx"
 
      
