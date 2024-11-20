@@ -3,9 +3,18 @@ name: Run Jmeter scripts
 on:
   workflow_dispatch:
   workflow_call:
+    inputs:
+      JmeterAPIscript1:
+        description: Name of Script1 to run
+        type: string
+        required: true
+      JmeterAPIscript2:
+        description: Name of Script2 to run
+        type: string
+        required: true
 env:
-  JmeterAPIscript1: DeterAPI/sampleAPI1.jmx
-  JmeterAPIscript2: DeterAPI/sampleAPI2.jmx
+  JmeterAPIscript1: ${{ inputs.JmeterAPIscript1 }}
+  JmeterAPIscript2: ${{ inputs.JmeterAPIscript2 }}
   JmeterUIscript1: DeterUI/sampleUI1.jmx
   JmeterUIscript2: DeterUI/sampleUI2.jmx
   
