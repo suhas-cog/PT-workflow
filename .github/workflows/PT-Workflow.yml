@@ -2,12 +2,26 @@ name: main workflow
 on: 
 
   workflow_dispatch:
-
+    inputs:
+      a2000-dete-app1:
+        type: boolean
+        description: a2000-dete-app
+        default: false
+      a2000-dete-app2:
+        type: boolean
+        description: a2000-dete-app2
+        default: false
 jobs:
-  PT:
-    if: github.event_name == 'workflow_dispatch'
+  a2000-dete-app:
+    if: ${{ github.event.inputs.a2000-dete-app1 == 'true'}}
     uses: ./.github/workflows/a2000-dete-app.yml
-    # with: 
-    #   environment : "qa"
-    #   testtype: "FT"
-    #   jobname: "job1"
+    with: 
+        JmeterAPIscript1 : "DeterAPI/sampleAPI1.jmx"
+        JmeterAPIscript2: "DeterAPI/sampleAPI2.jmx"
+        JmeterUIscript1: "DeterUI/sampleUI1.jmx"
+        JmeterUIscript2: "DeterUI/sampleUI2.jmx"
+  a2000-dete-app2:
+    if: ${{ github.event.inputs.a2000-dete-app2 == 'true'}}
+    uses: ./.github/workflows/a2000-dete-app.yml
+
+     
