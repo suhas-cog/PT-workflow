@@ -1,27 +1,6 @@
 name: PT workflow
 on: 
   workflow_dispatch:
-   #  inputs:
-   #    Component1:
-   #      type: boolean
-   #      description: Component1
-   #      default: false
-
-
-   #    Component2:
-   #      type: boolean
-   #      description: Component2
-   #      default: false
-
 jobs:
   PT:
-    runs-on: ubuntu-latest
-    steps:
-    - name: calling a2000-dete-app
-      uses: ./.github/workflows/a2000-dete-app.yml
-     # #if: ${{ github.event.inputs.Component1 == 'true'}} || ${{ github.event.client_payload.Component1 == 'true' }}
-     # uses: ./.github/workflows/component1.yml
-     # with: 
-     #  environment : "qa"
-     #  testtype: "FT"
-     #  jobname: "job1"
+    uses: ./.github/workflows/a2000-dete-app.yml
