@@ -3,6 +3,9 @@ on:
 
   workflow_dispatch:
     inputs:
+      environment:
+        required: false
+        description: environment
       a2000-dete-app1:
         type: boolean
         description: a2000-dete-app
