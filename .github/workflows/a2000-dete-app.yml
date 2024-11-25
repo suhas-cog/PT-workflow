@@ -57,6 +57,7 @@ jobs:
     - name: Running JMeter for Jmeter-API-script-1
       run: |
        echo "Running JMeter for $JmeterAPIscript1"
+       pwd
        jmeter -n -t $JmeterAPIscript1 -Jpath=api/users?page=1 -Jduration=110 -Jusers=10 -Jrampup=10 -l ./SampleAPIjtl1.jtl
       continue-on-error: true 
        
