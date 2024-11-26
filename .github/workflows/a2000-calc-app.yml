@@ -1,0 +1,195 @@
+name: Run Jmeter scripts
+
+on:
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      JmeterAPIscript1:
+        description: Name of Script1 to run
+        type: string
+        required: true
+      JmeterAPIscript2:
+        description: Name of Script2 to run
+        type: string
+        required: true
+      JmeterUIscript1:
+        description: Name of Script1 to run
+        type: string
+        required: true
+      JmeterUIscript2:
+        description: Name of Script2 to run
+        type: string
+        required: true
+env:
+  JmeterAPIscript1: ${{ inputs.JmeterAPIscript1 }}
+  JmeterAPIscript2: ${{ inputs.JmeterAPIscript2 }}
+  JmeterUIscript1: ${{ inputs.JmeterUIscript1 }}
+  JmeterUIscript2: ${{ inputs.JmeterUIscript2 }}
+  
+# A workflow run is made up of one or more jobs that can run sequentially
+jobs:
+  jmeter_API_job:
+# This job will run on AWS ECS API Runner in sequence 
+    runs-on: performanceAPI
+    
+# Git Checks-out our repository      
+    name: JMeter Test Execution
+    steps:    
+    - name: scripts to be executed
+      run: |
+        echo "$JmeterAPIscript1"
+        echo "$JmeterAPIscript2"
+        
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v2 
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip 
+        pip install requests boto3 pandas openpyxl
+
+   # Run the Jmeter test cases
+    - name: Running JMeter for Jmeter-API-script-1
+      run: |
+       echo "Running JMeter for $JmeterAPIscript1"
+       pwd
+       jmeter -n -t $JmeterAPIscript1 -Jpath=api/users?page=1 -Jduration=110 -Jusers=10 -Jrampup=10 -l ./SampleAPIjtl1.jtl
+      continue-on-error: true 
+       
+    - name: Running JMeter HTML for Jmeter-API-script-1
+      run: |
+       echo "Running JMeter HTML for $JmeterAPIscript1"
+       jmeter -Jjmeter.reportgenerator.exporter.html.series_filter="((T[0-9] {1,3}_))" -g ./SampleAPIjtl1.jtl -o ./HTMLReport1
+
+    #Starting execution for Next script
+    - name: Running JMeter for Jmeter-API-script-2
+      run: |
+       echo "Running JMeter for $JmeterAPIscript2"
+       jmeter -n -t $JmeterAPIscript2 -Jpath=api/users?page=1 -Jduration=110 -Jusers=10 -Jrampup=10 -l ./SampleAPIjtl2.jtl
+      continue-on-error: true 
+
+    - name: Running JMeter HTML for Jmeter-API-script-2
+      run: |
+       echo "Running JMeter HTML for $JmeterAPIscript2"
+       jmeter -Jjmeter.reportgenerator.exporter.html.series_filter="((T[0-9] {1,3}_))" -g ./SampleAPIjtl2.jtl -o ./HTMLReport2
+      continue-on-error: true 
+
+   # Upload the Jmeter results    
+    - name: Upload Results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: jmeter-API-results
+        path: |
+          SampleAPIjtl1.jtl
+          SampleAPIjtl2.jtl
+        if-no-files-found: error 
+        
+#filtered 
+  # upload the HTML Reports    
+    - name: Upload HTML Reports
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: jmeter-html-API-reports
+        path: |
+          HTMLReport1
+          HTMLReport2
+        if-no-files-found: error
+
+    # - name: Github token
+    #   run: echo "MY_GITHUB_TOKEN=${{ secrets.MY_GITHUB_TOKEN }}" >> $GITHUB_ENV
+      
+  # Run python script to convert .json to .csv
+    # - name: Run python script
+    #   run: |
+    #    python3 python.py
+
+    # Run python script to compare results
+    # - name: Run python script
+    #   run: |
+    #    python3 comparision-updated.py
+
+  jmeter_UI_job:
+# This job will run on AWS ECS API/UI Runner in sequence
+    needs: jmeter_API_job
+    runs-on: performanceAPI
+    
+# Git Checks-out our repository      
+    steps:
+    - name: scripts to be executed
+      run: |
+        echo "$JmeterUIscript1"
+        echo "$JmeterUIscript2"
+        
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v2 
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip 
+        pip install requests boto3 pandas openpyxl
+
+   # Run the Jmeter test cases
+    - name: Running JMeter for Jmeter-UI-script-1
+      run: |
+       echo "Running JMeter for $JmeterUIscript1"
+       jmeter -n -t $JmeterUIscript1 -Jpath=api/users?page=1 -Jduration=110 -Jusers=10 -Jrampup=10 -l ./SampleUIjtl1.jtl
+       echo "Running JMeter HTML for $JmeterUIscript1"
+       jmeter -Jjmeter.reportgenerator.exporter.html.series_filter="((T[0-9] {1,3}_))" -g ./SampleUIjtl1.jtl -o ./HTMLReport1
+       echo "Running JMeter HTML for $JmeterUIscript1"
+       python3 python.py
+       echo "Running JMeter HTML for $JmeterUIscript1"
+       python3 comparision-updated.py
+      continue-on-error: true
+
+    - name: Running JMeter HTML for Jmeter-UI-script-1
+      run: |
+       
+      continue-on-error: true
+
+    #Starting execution for Next script
+    - name: Running JMeter for Jmeter-UI-script-2
+      run: |
+       echo "Running JMeter for $JmeterUIscript2"
+       jmeter -n -t $JmeterUIscript2 -Jpath=api/users?page=1 -Jduration=110 -Jusers=10 -Jrampup=10 -l ./SampleUIjtl2.jtl
+      continue-on-error: true
+
+    - name: Running JMeter HTML for Jmeter-UI-script-2
+      run: |
+       echo "Running JMeter HTML for $JmeterUIscript2"
+       jmeter -Jjmeter.reportgenerator.exporter.html.series_filter="((T[0-9] {1,3}_))" -g ./SampleUIjtl2.jtl -o ./HTMLReport2
+      continue-on-error: true
+
+   # Upload the Jmeter results    
+    - name: Upload Results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: jmeter-UI-results
+        path: |
+          SampleUIjtl1.jtl
+          SampleUIjtl2.jtl
+        if-no-files-found: error 
+        
+#filtered 
+  # upload the HTML Reports    
+    - name: Upload HTML Reports
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: jmeter-html-UI-reports
+        path: |
+          HTMLReport1
+          HTMLReport2
+        if-no-files-found: error
