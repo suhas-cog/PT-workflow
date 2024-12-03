@@ -2,29 +2,16 @@ name: Run Jmeter scripts
 
 on:
   workflow_dispatch:
-  workflow_call:
     inputs:
-      JmeterAPIscript1:
-        description: Name of Script1 to run
-        type: string
+      comp:
+        description: 'Component to run'
         required: true
-      JmeterAPIscript2:
-        description: Name of Script2 to run
-        type: string
-        required: true
-      JmeterUIscript1:
-        description: Name of Script1 to run
-        type: string
-        required: true
-      JmeterUIscript2:
-        description: Name of Script2 to run
-        type: string
-        required: true
-env:
-  JmeterAPIscript1: ${{ inputs.JmeterAPIscript1 }}
-  JmeterAPIscript2: ${{ inputs.JmeterAPIscript2 }}
-  JmeterUIscript1: ${{ inputs.JmeterUIscript1 }}
-  JmeterUIscript2: ${{ inputs.JmeterUIscript2 }}
+        default: 'comp1'
+        type: choice
+        options:
+          - comp1
+          - comp2
+          - comp4
   
 # A workflow run is made up of one or more jobs that can run sequentially
 jobs:
@@ -34,12 +21,7 @@ jobs:
     
 # Git Checks-out our repository      
     name: JMeter Test Execution
-    steps:    
-    - name: scripts to be executed
-      run: |
-        echo "$JmeterAPIscript1"
-        echo "$JmeterAPIscript2"
-        
+    steps:   
     - name: Checkout
       uses: actions/checkout@v4
 
@@ -56,7 +38,7 @@ jobs:
    # Run the Jmeter test cases
     - name: Running JMeter for Jmeter-API-script-1
       run: |
-      comp=${{ github.event.inputs.comp }}
+        comp=${{ github.event.inputs.comp }}
         echo "Component selected: $comp"
         in_section=false
         while IFS= read -r line; do
