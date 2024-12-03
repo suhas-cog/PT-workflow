@@ -12,13 +12,16 @@ on:
           - comp1
           - comp2
           - comp4
-env:
-      JMETER_THREADS: 10
-      JMETER_DURATION: 60
-      JMETER_PATH: './sample.jmx'
+
 jobs:
   performance_test:
     runs-on: ubuntu-latest
+
+    env:
+      JMETER_THREADS: 10
+      JMETER_DURATION: 60
+      JMETER_PATH: './sample.jmx'
+      
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 11 for x64
