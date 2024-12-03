@@ -1,0 +1,2 @@
+comp1
+DeterAPI/sampleAPI1.jmx -Jpath=api/users?page=1 -Jduration=110 -Jusers=10 -Jrampup=10 -l ./SampleAPIjtl1.jtl
