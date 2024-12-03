@@ -1,4 +1,4 @@
-name: Run Jmeter scripts
+name: Run psuedocode
 
 on:
   workflow_dispatch:
