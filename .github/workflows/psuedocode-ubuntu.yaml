@@ -78,6 +78,8 @@ jobs:
               jtl_file=$(echo $line | grep -oP '(?<=-l )[^ ]+')
               $GITHUB_WORKSPACE/apache-jmeter-5.5/bin/./jmeter.sh -n -t $line
               echo "Running JMeter HTML"
+              $GITHUB_WORKSPACE/apache-jmeter-5.5/bin/./jmeter.sh -g $line
+              echo "Running JMeter HTML"
               if [ -f $GITHUB_WORKSPACE/$jtl_file ]; then
                 report_dir=$(dirname $jtl_file)/Html2
                 rm -rf $GITHUB_WORKSPACE/$report_dir
@@ -89,3 +91,4 @@ jobs:
               fi
             fi
           done < scripts_to_run.txt
+
