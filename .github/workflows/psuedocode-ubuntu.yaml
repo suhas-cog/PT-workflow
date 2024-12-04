@@ -77,14 +77,30 @@ jobs:
               echo "Running script: $line"
               jtl_file=$(echo $line | grep -oP '(?<=-l )[^ ]+')
               $GITHUB_WORKSPACE/apache-jmeter-5.5/bin/./jmeter.sh -n -t $line
-              echo "Running JMeter HTML"
-              $GITHUB_WORKSPACE/apache-jmeter-5.5/bin/./jmeter.sh -g $line
-              echo "$jtl_file $GITHUB_WORKSPACE/MyReport" >> scripts_to_run_html.txt
             fi
           done < scripts_to_run.txt
 
       - name: Generate JMeter Reports
         run: |
+          comp=${{ github.event.inputs.comp }}
+            echo "Component selected: $comp"
+            in_section=false
+            while IFS= read -r line; do
+              if [[ $line == "$comp:" ]]; then
+                in_section=true
+                continue
+              elif [[ $line == *:* ]]; then
+                in_section=false
+              fi
+
+            if $in_section; then
+              mkdir -p $GITHUB_WORKSPACE/MyReport
+              echo "Running JMeter HTML"
+              jtl_file=$(echo $line | grep -oP '(?<=-l )[^ ]+')
+              $GITHUB_WORKSPACE/apache-jmeter-5.5/bin/./jmeter.sh -g $line
+              echo "$jtl_file $GITHUB_WORKSPACE/MyReport" >> scripts_to_run_html.txt
+            fi
+            
           while IFS= read -r line; do
             if [[ $line == *.jtl* ]]; then
               jtl_file=$(echo $line | awk '{print $1}')
