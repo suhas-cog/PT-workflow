@@ -1,5 +1,5 @@
 comp1:
-DeterAPI/sampleAPI1.jmx -Jpath=api/users?page=1 -Jduration=110 -Jusers=10 -Jrampup=10 -l $GITHUB_WORKSPACE/MyReport/SampleAPIjtl1.jtl
+DeterAPI/sampleAPI1.jmx -Jpath=api/users?page=1 -Jduration=110 -Jusers=10 -Jrampup=10 -l MyReport/SampleAPIjtl1.jtl
 DeterUI/sampleUI1.jmx -Jpath=api/users?page=1 -Jduration=110 -Jusers=10 -Jrampup=10 -l DeterUI/SampleUIjtl1.jtl
 comp2:
 DeterAPI/sampleAPI2.jmx -Jpath=api/users?page=1 -Jduration=110 -Jusers=10 -Jrampup=10 -l DeterAPI/SampleAPIjtl2.jtl
