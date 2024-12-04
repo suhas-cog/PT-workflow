@@ -73,7 +73,7 @@ jobs:
             fi
   
             if $in_section; then
-              mkdir $GITHUB_WORKSPACE/MyReport
+              mkdir -p $GITHUB_WORKSPACE/MyReport
               echo "Running script: $line"
               $GITHUB_WORKSPACE/apache-jmeter-5.5/bin/./jmeter.sh -n -t $line
               echo "Running JMeter HTML"
