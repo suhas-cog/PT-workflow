@@ -98,3 +98,10 @@ jobs:
           fi
           done < scripts_to_run_html.txt
 
+      - name: Upload JMeter Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: jmeter-reports
+          path: |
+            Report/HTMLReport1
+
