@@ -82,23 +82,19 @@ jobs:
 
       - name: Generate JMeter Reports
         run: |
-          comp=${{ github.event.inputs.comp }}
-            echo "Component selected: $comp"
-            in_section=false
-            while IFS= read -r line; do
-              if [[ $line == "$comp:" ]]; then
-                in_section=true
-                continue
-              elif [[ $line == *:* ]]; then
-                in_section=false
-              fi
-
-            if $in_section; then
-              mkdir -p $GITHUB_WORKSPACE/MyReport
-              echo "Running JMeter HTML"
-              jtl_file=$(echo $line | grep -oP '(?<=-l )[^ ]+')
-              $GITHUB_WORKSPACE/apache-jmeter-5.5/bin/./jmeter.sh -g $line
-              echo "$jtl_file $GITHUB_WORKSPACE/MyReport" >> scripts_to_run_html.txt
+          while IFS= read -r line; do
+          if [[ $line == *.jtl* ]]; then
+            jtl_file=$(echo $line | awk '{print $1}')
+            report_dir=$(echo $line | awk '{print $3}')
+            echo "Generating report for: $jtl_file"
+            if [ -f $GITHUB_WORKSPACE/$jtl_file ]; then
+              rm -rf $GITHUB_WORKSPACE/$report_dir
+              mkdir -p $GITHUB_WORKSPACE/$report_dir
+              $GITHUB_WORKSPACE/apache-jmeter-5.5/bin/jmeter.sh -g $GITHUB_WORKSPACE/$jtl_file -o $GITHUB_WORKSPACE/$report_dir
+            else
+              echo "Error: Test results file not found: $GITHUB_WORKSPACE/$jtl_file"
+              exit 1
             fi
+          fi
           done < scripts_to_run_html.txt
 
