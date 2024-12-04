@@ -1,2 +1,2 @@
-comp1:
-Report/SampleAPIjtl1.jtl -o Report/HTMLReport1
+comp2:
+DeterAPI/SampleAPIjtl2.jtl -o Report/HTMLReport1
