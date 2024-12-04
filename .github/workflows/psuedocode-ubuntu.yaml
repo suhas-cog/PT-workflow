@@ -71,12 +71,21 @@ jobs:
             elif [[ $line == *:* ]]; then
               in_section=false
             fi
-  
+      
             if $in_section; then
-              mkdir -p MyReport
+              mkdir -p $GITHUB_WORKSPACE/MyReport
               echo "Running script: $line"
               $GITHUB_WORKSPACE/apache-jmeter-5.5/bin/./jmeter.sh -n -t $line
-             # echo "Running JMeter HTML"
-             # $GITHUB_WORKSPACE/apache-jmeter-5.5/bin/./jmeter.sh -Jjmeter.reportgenerator.exporter.html.series_filter="((T[0-9] {1,3}_))" -g MyReport/SampleAPIjtl1.jtl -o ./Html2
+              jtl_file=$(echo $line | grep -oP '(?<=-l )[^ ]+')
+              echo "Running JMeter HTML"
+              if [ -f $GITHUB_WORKSPACE/$jtl_file ]; then
+                report_dir=$(dirname $jtl_file)/Html2
+                rm -rf $GITHUB_WORKSPACE/$report_dir
+                mkdir -p $GITHUB_WORKSPACE/$report_dir
+                $GITHUB_WORKSPACE/apache-jmeter-5.5/bin/./jmeter.sh -g $GITHUB_WORKSPACE/$jtl_file -o $GITHUB_WORKSPACE/$report_dir
+              else
+                echo "Error: Test results file not found: $GITHUB_WORKSPACE/$jtl_file"
+                exit 1
+              fi
             fi
           done < scripts_to_run.txt
