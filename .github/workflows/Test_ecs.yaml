@@ -1,5 +1,6 @@
 import boto3
 
+
 def get_ecs_cluster_details(cluster_name, service_name):
     # Create a boto3 client for ECS
     ecs_client = boto3.client('ecs')
