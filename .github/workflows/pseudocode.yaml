@@ -18,7 +18,7 @@ on:
 jobs:
   jmeter_API_job:
 # This job will run on AWS ECS API Runner in sequence 
-    runs-on: performanceAPI
+    runs-on: ecsrunner
     
 # Git Checks-out our repository      
     name: JMeter Test Execution
