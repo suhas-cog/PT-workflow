@@ -1,6 +1,6 @@
 name: main workflow
-on: 
-
+on:
+  push:
 
   workflow_dispatch:
     inputs:
