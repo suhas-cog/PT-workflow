@@ -39,7 +39,7 @@ jobs:
    # Run the Jmeter test cases
     - name: Running JMeter for Jmeter-API-script-1
       run: |
-        comp=${{ github.event.inputs.comp }}
+        comp=comp1
         echo "Component selected: $comp"
         in_section=false
         while IFS= read -r line; do
