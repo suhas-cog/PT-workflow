@@ -1,30 +1,22 @@
 import boto3
 
-
-def get_ecs_cluster_details(cluster_name, service_name):
+def update_service_desired_count(cluster_name, service_name, new_desired_count):
     # Create a boto3 client for ECS
     ecs_client = boto3.client('ecs')
 
-    # Get cluster details
-    cluster_response = ecs_client.describe_clusters(clusters=[cluster_name])
-    if not cluster_response['clusters']:
-        print(f"No cluster found with name {cluster_name}")
-        return
+    # Update the desired count for the service
+    response = ecs_client.update_service(
+        cluster=cluster_name,
+        service=service_name,
+        desiredCount=new_desired_count
+    )
 
-    cluster_details = cluster_response['clusters'][0]
-    print(f"Cluster Details: {cluster_details}")
-
-    # Get service details
-    service_response = ecs_client.describe_services(cluster=cluster_name, services=[service_name])
-    if not service_response['services']:
-        print(f"No service found with name {service_name} in cluster {cluster_name}")
-        return
-
-    service_details = service_response['services'][0]
-    desired_count = service_details['desiredCount']
-    print(f"Service '{service_name}' Desired Count: {desired_count}")
+    print(f"Updated service '{service_name}' in cluster '{cluster_name}' to desired count: {new_desired_count}")
+    print(f"Response: {response}")
 
 if __name__ == "__main__":
-    cluster_name = 'your-cluster-name'
-    service_name = 'your-service-name'
-    get_ecs_cluster_details(cluster_name, service_name)
+    cluster_name = 'default'
+    service_name = 'ECS_Runner'
+    new_desired_count = 10  # Set the desired count to the new value you want
+
+    update_service_desired_count(cluster_name, service_name, new_desired_count)
