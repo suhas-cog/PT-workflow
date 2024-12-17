@@ -30,7 +30,7 @@ env:
 jobs:
   jmeter_API_job:
 # This job will run on AWS ECS API Runner in sequence 
-    runs-on: performanceAPI
+    runs-on: ecsrunner
     
 # Git Checks-out our repository      
     name: JMeter Test Execution
@@ -53,6 +53,9 @@ jobs:
         python -m pip install --upgrade pip 
         pip install requests boto3 pandas openpyxl
 
+    - name: scaling ECS runner
+      run: |
+        python scale.py 
    # Run the Jmeter test cases
     - name: Running JMeter for Jmeter-API-script-1
       run: |
